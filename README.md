@@ -11,7 +11,7 @@ ServiceNow Closing Notes manager for IT support teams.
 - Export/import your snippet library as JSON
 
 ## Usage
-Visit the live app: https://yourusername.github.io/tech-brain
+Visit the live app: https://minawmikhail-ua07.github.io/tech-brain
 
 ## Notes
 - All data is saved locally in your browser (localStorage)
