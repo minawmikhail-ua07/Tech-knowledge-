@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Brain</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e13;
+  --surface: #111820;
+  --surface2: #18212c;
+  --surface3: #1e2a38;
+  --border: #253040;
+  --accent: #00e5ff;
+  --accent-dim: rgba(0,229,255,0.12);
+  --accent-glow: rgba(0,229,255,0.25);
+  --green: #00e676;
+  --green-dim: rgba(0,230,118,0.1);
+  --red: #ff5252;
+  --yellow: #ffd740;
+  --purple: #b388ff;
+  --text: #e8f0f8;
+  --muted: #5a7a96;
+  --muted2: #3d5a70;
+  --brain: #00e5ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── HEADER ─── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 34px;
+  height: 34px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.brand-name span { color: var(--accent); }
+
+.header-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+
+.header-sub {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.hbtn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.hbtn:hover { color: var(--text); border-color: var(--muted2); background: var(--surface2); }
+
+/* ─── LAYOUT ─── */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sb-search {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sb-search input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px 10px 7px 30px;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.15s;
+}
+.sb-search input:focus { border-color: var(--accent); }
+.sb-search input::placeholder { color: var(--muted); }
+
+.sb-search-wrap {
+  position: relative;
+}
+.sb-search-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4;
+}
+
+.sb-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+}
+.sb-list::-webkit-scrollbar { width: 3px; }
+.sb-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.sb-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  padding: 10px 8px 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sb-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.snippet-card {
+  padding: 9px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 2px;
+  transition: all 0.12s;
+}
+.snippet-card:hover { background: var(--surface2); border-color: var(--border); }
+.snippet-card.active {
+  background: var(--accent-dim);
+  border-color: rgba(0,229,255,0.25);
+}
+.sc-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+.sc-meta {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.sc-badge {
+  font-size: 9px;
+  font-family: 'Space Mono', monospace;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--surface3);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.sc-badge.has-img { color: var(--purple); border-color: rgba(179,136,255,0.3); background: rgba(179,136,255,0.08); }
+.sc-badge.has-link { color: var(--yellow); border-color: rgba(255,215,64,0.3); background: rgba(255,215,64,0.08); }
+
+.sb-new {
+  padding: 8px 6px;
+  border-top: 1px solid var(--border);
+}
+.sb-new-btn {
+  width: 100%;
+  background: var(--accent-dim);
+  border: 1px dashed rgba(0,229,255,0.3);
+  color: var(--accent);
+  border-radius: 7px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.sb-new-btn:hover { background: rgba(0,229,255,0.18); }
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--muted);
+}
+.empty-icon { opacity: 0.2; }
+.empty-state p { font-size: 14px; }
+
+/* ─── EDITOR ─── */
+.editor {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-header {
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+.title-input::placeholder { color: var(--muted2); }
+
+.tag-input {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  width: 110px;
+  transition: all 0.15s;
+}
+.tag-input:focus { border-color: var(--accent); color: var(--text); }
+
+.del-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 5px 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.12s;
+  font-family: 'DM Sans', sans-serif;
+}
+.del-btn:hover { color: var(--red); border-color: rgba(255,82,82,0.3); background: rgba(255,82,82,0.08); }
+
+/* ─── TABS ─── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0 20px;
+}
+
+.tab {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 9px 16px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-count {
+  font-size: 10px;
+  background: var(--surface3);
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ─── TAB PANELS ─── */
+.tab-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.tab-panel.active { display: flex; }
+
+/* NOTES PANEL */
+.notes-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+textarea.notes-area {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 16px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  overflow-y: auto;
+}
+textarea.notes-area::placeholder { color: var(--muted2); }
+textarea.notes-area::-webkit-scrollbar { width: 4px; }
+textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* BOTTOM BAR */
+.bottom-bar {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fmt-group {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+.fmt-btn {
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.1s;
+  font-weight: 500;
+}
+.fmt-btn.active { background: var(--accent); color: #000; font-weight: 600; }
+
+.ai-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(179,136,255,0.15), rgba(0,229,255,0.1));
+  border: 1px solid rgba(179,136,255,0.3);
+  color: var(--purple);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+.ai-btn:hover { background: linear-gradient(135deg, rgba(179,136,255,0.25), rgba(0,229,255,0.15)); border-color: rgba(179,136,255,0.5); }
+.ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ai-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(179,136,255,0.3);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.copy-main-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--green);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  margin-left: auto;
+}
+.copy-main-btn:hover { background: #33eb91; }
+.copy-main-btn.copied { background: var(--accent); }
+
+.char-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ─── AI REFINE PANEL ─── */
+.ai-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 0;
+}
+
+.ai-panel-top {
+  padding: 14px 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-instruction {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  resize: none;
+  min-height: 60px;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+}
+.ai-instruction:focus { border-color: var(--purple); }
+.ai-instruction::placeholder { color: var(--muted); }
+
+.ai-run-btn {
+  background: linear-gradient(135deg, #b388ff, #00e5ff);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ai-run-btn:hover { opacity: 0.85; }
+.ai-run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ai-preset-row {
+  padding: 8px 20px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.ai-preset-label { font-size: 10px; color: var(--muted); font-weight: 500; display: flex; align-items: center; padding-right: 4px; }
+.preset-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.12s;
+}
+.preset-btn:hover { color: var(--purple); border-color: rgba(179,136,255,0.4); background: rgba(179,136,255,0.08); }
+
+.ai-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ai-results::-webkit-scrollbar { width: 3px; }
+.ai-results::-webkit-scrollbar-thumb { background: var(--border); }
+
+.ai-result-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+
+.ai-result-header {
+  padding: 8px 12px;
+  background: var(--surface3);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ai-result-label {
+  font-size: 11px;
+  color: var(--purple);
+  font-weight: 600;
+  font-family: 'Space Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ai-result-actions { display: flex; gap: 6px; }
+.ai-action-btn {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.12s;
+}
+.ai-action-btn:hover { color: var(--text); border-color: var(--muted2); }
+.ai-action-btn.apply { color: var(--green); border-color: rgba(0,230,118,0.3); background: var(--green-dim); }
+.ai-action-btn.apply:hover { background: rgba(0,230,118,0.2); }
+
+.ai-result-body {
+  padding: 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ai-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ─── SCREENSHOTS PANEL ─── */
+.screenshots-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.screenshot-drop-zone {
+  margin: 16px 20px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+}
+.screenshot-drop-zone:hover, .screenshot-drop-zone.drag-over {
+  border-color: var(--purple);
+  background: rgba(179,136,255,0.06);
+}
+.drop-icon { margin-bottom: 8px; opacity: 0.5; }
+.drop-text { font-size: 13px; color: var(--muted); }
+.drop-text strong { color: var(--text); }
+.drop-sub { font-size: 11px; color: var(--muted2); margin-top: 4px; }
+
+.screenshots-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+.screenshots-grid::-webkit-scrollbar { width: 3px; }
+.screenshots-grid::-webkit-scrollbar-thumb { background: var(--border); }
+
+.screenshot-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  cursor: pointer;
+  transition: all 0.15s;
+  aspect-ratio: 16/10;
+}
+.screenshot-item:hover { border-color: var(--accent); transform: translateY(-1px); }
+.screenshot-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.screenshot-del {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(10,14,19,0.85);
+  border: none;
+  border-radius: 4px;
+  color: var(--red);
+  font-size: 12px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.screenshot-item:hover .screenshot-del { opacity: 1; }
+.screenshot-caption-input {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10,14,19,0.8);
+  border: none;
+  border-top: 1px solid var(--border);
+  padding: 4px 7px;
+  font-size: 10px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+.screenshot-caption-input::placeholder { color: var(--muted); }
+
+/* ─── LINKS PANEL ─── */
+.links-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.link-add-row {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+}
+.link-url-input, .link-label-input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 11px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.link-url-input { flex: 2; }
+.link-label-input { flex: 1; }
+.link-url-input:focus, .link-label-input:focus { border-color: var(--yellow); }
+.link-url-input::placeholder, .link-label-input::placeholder { color: var(--muted); }
+
+.link-add-btn {
+  background: rgba(255,215,64,0.12);
+  border: 1px solid rgba(255,215,64,0.3);
+  color: var(--yellow);
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.link-add-btn:hover { background: rgba(255,215,64,0.2); }
+
+.links-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.links-list::-webkit-scrollbar { width: 3px; }
+.links-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.12s;
+}
+.link-item:hover { border-color: rgba(255,215,64,0.25); }
+.link-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+.link-info { flex: 1; min-width: 0; }
+.link-label-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.link-url-text {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Space Mono', monospace;
+}
+.link-open-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 9px;
+  font-size: 11px;
+  color: var(--yellow);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.link-open-btn:hover { border-color: rgba(255,215,64,0.4); background: rgba(255,215,64,0.08); }
+.link-del-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.12s;
+  font-size: 14px;
+}
+.link-del-btn:hover { color: var(--red); }
+
+.links-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ─── LIGHTBOX ─── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* ─── MODAL ─── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal h3 { font-size: 15px; font-weight: 600; }
+.modal p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.modal-cancel { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 7px 14px; font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.modal-confirm { background: var(--red); border: none; border-radius: 6px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  pointer-events: none;
+  z-index: 999;
+  font-family: 'DM Sans', sans-serif;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: var(--green); color: #000; }
+.toast.info { background: var(--accent); color: #000; }
+.toast.ai { background: var(--purple); color: #000; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="brand">
+    <!-- Tech Brain Logo -->
+    <svg class="logo-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="34" height="34" rx="8" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+      <!-- Brain outline -->
+      <path d="M17 7C13 7 10 9.5 10 13c0 1.5.5 2.8 1.3 3.8C10.5 17.8 10 19 10 20.5c0 2.5 2 4.5 4.5 4.5H17h2.5c2.5 0 4.5-2 4.5-4.5 0-1.5-.5-2.7-1.3-3.7C23.5 15.8 24 14.5 24 13c0-3.5-3-6-7-6z" fill="none" stroke="#00e5ff" stroke-width="1.2" stroke-linejoin="round"/>
+      <!-- Circuit lines -->
+      <line x1="17" y1="7" x2="17" y2="4" stroke="#00e5ff" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <circle cx="17" cy="3.5" r="1" fill="#00e5ff" opacity="0.7"/>
+      <line x1="17" y1="13" x2="17" y2="18" stroke="#00e5ff" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="14" y1="16" x2="11" y2="16" stroke="#00e5ff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="20" y1="16" x2="23" y2="16" stroke="#00e5ff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      <circle cx="17" cy="18.5" r="1.2" fill="#00e5ff" opacity="0.9"/>
+      <circle cx="11" cy="16" r="1" fill="rgba(0,229,255,0.5)"/>
+      <circle cx="23" cy="16" r="1" fill="rgba(0,229,255,0.5)"/>
+    </svg>
+    <span class="brand-name">Tech<span>Brain</span></span>
+  </div>
+  <div class="header-sep"></div>
+  <span class="header-sub">ServiceNow Closing Notes</span>
+  <div class="header-right">
+    <button class="hbtn" onclick="exportAll()">↑ Export</button>
+    <label class="hbtn" style="cursor:pointer">↓ Import<input type="file" accept=".json" style="display:none" onchange="importAll(event)"></label>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-search">
+      <div class="sb-search-wrap">
+        <svg class="sb-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search snippets..." oninput="filterSnippets(this.value)" id="searchInput">
+      </div>
+    </div>
+    <div class="sb-list" id="snippetList"></div>
+    <div class="sb-new">
+      <button class="sb-new-btn" onclick="newSnippet()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        New Snippet
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="mainArea" style="display:flex;flex-direction:column;overflow:hidden;flex:1;">
+    <div class="empty-state" id="emptyState">
+      <svg class="empty-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <p>Select a snippet or create a new one</p>
+    </div>
+
+    <div class="editor" id="editorWrap" style="display:none;flex:1;overflow:hidden;">
+      <!-- Editor header -->
+      <div class="editor-header">
+        <input class="title-input" id="titleInput" placeholder="Snippet title..." oninput="saveCurrent()">
+        <input class="tag-input" id="tagInput" placeholder="tag" oninput="saveCurrent()">
+        <button class="del-btn" onclick="confirmDelete()">Delete</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" id="tab-notes" onclick="switchTab('notes')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Notes
+        </button>
+        <button class="tab" id="tab-refine" onclick="switchTab('refine')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+          AI Refine
+        </button>
+        <button class="tab" id="tab-screenshots" onclick="switchTab('screenshots')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          Screenshots
+          <span class="tab-count" id="scCount">0</span>
+        </button>
+        <button class="tab" id="tab-links" onclick="switchTab('links')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Links
+          <span class="tab-count" id="lnkCount">0</span>
+        </button>
+      </div>
+
+      <!-- NOTES TAB -->
+      <div class="tab-panel active" id="panel-notes">
+        <div class="notes-panel">
+          <textarea class="notes-area" id="notesArea" placeholder="Paste or type your closing notes here...&#10;&#10;• Step one&#10;• Step two&#10;• ..." oninput="saveCurrent(); updateCharCount()"></textarea>
+          <div class="bottom-bar">
+            <div class="fmt-group">
+              <button class="fmt-btn active" id="fmtRaw" onclick="setFormat('raw')">Raw</button>
+              <button class="fmt-btn" id="fmtBullet" onclick="setFormat('bullet')">• Bullets</button>
+              <button class="fmt-btn" id="fmtNum" onclick="setFormat('numbered')">1. List</button>
+            </div>
+            <button class="ai-btn" onclick="quickRefine()" id="quickRefineBtn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              Quick Refine
+            </button>
+            <button class="copy-main-btn" id="copyBtn" onclick="copyToClipboard()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy for SN
+            </button>
+            <span class="char-count" id="charCount">0 chars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI REFINE TAB -->
+      <div class="tab-panel" id="panel-refine">
+        <div class="ai-panel">
+          <div class="ai-panel-top">
+            <textarea class="ai-instruction" id="aiInstruction" placeholder="Describe how to refine these notes... e.g. 'Fix grammar and make it more professional' or 'Convert to clear numbered steps for a ServiceNow ticket'" rows="2"></textarea>
+            <button class="ai-run-btn" id="aiRunBtn" onclick="runAIRefine()">✦ Refine</button>
+          </div>
+          <div class="ai-preset-row">
+            <span class="ai-preset-label">Quick:</span>
+            <button class="preset-btn" onclick="applyPreset('Fix grammar and spelling, improve clarity')">Fix Grammar</button>
+            <button class="preset-btn" onclick="applyPreset('Rewrite as professional IT closing notes for a ServiceNow ticket. Use clear numbered steps.')">SN Format</button>
+            <button class="preset-btn" onclick="applyPreset('Make this more concise and remove redundancy')">Condense</button>
+            <button class="preset-btn" onclick="applyPreset('Expand with more technical detail and professional terminology')">Expand</button>
+            <button class="preset-btn" onclick="applyPreset('Rewrite in plain English that a non-technical user can understand')">Simplify</button>
+          </div>
+          <div class="ai-results" id="aiResults">
+            <div class="ai-empty">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              <span>Choose a preset or write a custom instruction</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREENSHOTS TAB -->
+      <div class="tab-panel" id="panel-screenshots">
+        <div class="screenshots-panel">
+          <div class="screenshot-drop-zone" id="dropZone" onclick="document.getElementById('screenshotInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+            <div class="drop-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b388ff" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            </div>
+            <div class="drop-text"><strong>Click or drag</strong> screenshots here</div>
+            <div class="drop-sub">PNG, JPG, GIF, WebP supported</div>
+          </div>
+          <input type="file" id="screenshotInput" accept="image/*" multiple style="display:none" onchange="handleScreenshotUpload(event)">
+          <div class="screenshots-grid" id="screenshotsGrid"></div>
+        </div>
+      </div>
+
+      <!-- LINKS TAB -->
+      <div class="tab-panel" id="panel-links">
+        <div class="links-panel">
+          <div class="link-add-row">
+            <input class="link-url-input" id="linkUrl" type="text" placeholder="https://..." onkeydown="if(event.key==='Enter')addLink()">
+            <input class="link-label-input" id="linkLabel" type="text" placeholder="Label (optional)" onkeydown="if(event.key==='Enter')addLink()">
+            <button class="link-add-btn" onclick="addLink()">+ Add Link</button>
+          </div>
+          <div class="links-list" id="linksList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-bg" id="deleteModal">
+  <div class="modal">
+    <h3>Delete snippet?</h3>
+    <p>This will permanently remove the snippet, all screenshots, and all links attached to it.</p>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" onclick="deleteSnippet()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'techbrain_v2';
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+const DEFAULT_SNIPPETS = [
+  { id: uid(), title: 'macOS Password Recovery', tag: 'macOS', format: 'bullet', notes: `Boot into recovery mode and create a local password.\nLog back into the laptop using the new local credentials.\nUpdate and create a new Intuit network password.\nSynchronize the Intuit network password with the local account password.\nConfigure Touch ID and enroll in Beyond Identity.\nSign in to Slack, Zoom, and other enterprise applications.\nToggle sign-out and sign-in within the Password Tool to ensure full synchronization.\nPerform a final logout and login to verify all credentials and access.`, screenshots: [], links: [] },
+  { id: uid(), title: 'CyberArk Issue', tag: 'CyberArk', format: 'bullet', notes: `Uninstall CyberArk via the AirWatch MDM (AWMDM) portal.\nPerform a system restart to refresh the workstation environment.\nReinstall CyberArk through the AirWatch MDM (AWMDM) portal.\nAllow approximately 4 to 5 minutes for administrative access to be provisioned.`, screenshots: [], links: [] },
+  { id: uid(), title: 'Claude Integration Fix', tag: 'Claude', format: 'raw', notes: `Enabled code execution and file creation functionalities within the form settings configuration.`, screenshots: [], links: [] },
+  { id: uid(), title: 'App Cache Clear', tag: 'General', format: 'raw', notes: `Cleared cache from Help troubleshooting menu then restart the app.`, screenshots: [], links: [] },
+  { id: uid(), title: 'Island Browser Install', tag: 'Island', format: 'raw', notes: `Install from the EUM.`, screenshots: [], links: [] },
+  { id: uid(), title: 'Printer Issue (Windows)', tag: 'Printer', format: 'bullet', notes: `Uninstall secure printer.\nInstall it back from CyberArk.\nConnect to Zscaler.\nClear ZDX data.\nRestart ZDX service.`, screenshots: [], links: [] }
+];
+
+let snippets = [];
+let currentId = null;
+let searchTerm = '';
+let activeTab = 'notes';
+
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  snippets = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_SNIPPETS));
+  // migrate old snippets
+  snippets.forEach(s => {
+    if (!s.screenshots) s.screenshots = [];
+    if (!s.links) s.links = [];
+  });
+  if (!raw) save();
+}
+
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(snippets)); }
+
+function getSnippet() { return snippets.find(x => x.id === currentId); }
+
+// ── RENDER SIDEBAR ──
+function render() {
+  const list = document.getElementById('snippetList');
+  const filtered = snippets.filter(s =>
+    s.title.toLowerCase().includes(searchTerm) ||
+    (s.tag||'').toLowerCase().includes(searchTerm) ||
+    s.notes.toLowerCase().includes(searchTerm)
+  );
+  list.innerHTML = '';
+  if (!filtered.length) {
+    list.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;padding:24px">No results</div>`;
+    return;
+  }
+  const groups = {};
+  filtered.forEach(s => { const t = s.tag||'General'; (groups[t]||(groups[t]=[])).push(s); });
+  Object.entries(groups).forEach(([tag, items]) => {
+    const lbl = document.createElement('div');
+    lbl.className = 'sb-group-label';
+    lbl.textContent = tag;
+    list.appendChild(lbl);
+    items.forEach(s => {
+      const d = document.createElement('div');
+      d.className = 'snippet-card' + (s.id === currentId ? ' active' : '');
+      const hasImg = s.screenshots && s.screenshots.length > 0;
+      const hasLink = s.links && s.links.length > 0;
+      d.innerHTML = `
+        <div class="sc-title">${esc(s.title)||'Untitled'}</div>
+        <div class="sc-meta">
+          ${hasImg ? `<span class="sc-badge has-img">⬡ ${s.screenshots.length}</span>` : ''}
+          ${hasLink ? `<span class="sc-badge has-link">↗ ${s.links.length}</span>` : ''}
+        </div>`;
+      d.onclick = () => selectSnippet(s.id);
+      list.appendChild(d);
+    });
+  });
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── SELECT SNIPPET ──
+function selectSnippet(id) {
+  currentId = id;
+  const s = getSnippet();
+  if (!s) return;
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('editorWrap').style.display = 'flex';
+  document.getElementById('titleInput').value = s.title;
+  document.getElementById('tagInput').value = s.tag || '';
+  document.getElementById('notesArea').value = s.notes;
+  setFormatUI(s.format || 'raw');
+  updateCharCount();
+  renderScreenshots();
+  renderLinks();
+  updateTabCounts();
+  render();
+  // clear AI results
+  document.getElementById('aiResults').innerHTML = `<div class="ai-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg><span>Choose a preset or write a custom instruction</span></div>`;
+}
+
+function newSnippet() {
+  const s = { id: uid(), title: '', tag: '', notes: '', format: 'raw', screenshots: [], links: [] };
+  snippets.unshift(s);
+  save();
+  selectSnippet(s.id);
+  document.getElementById('titleInput').focus();
+}
+
+function saveCurrent() {
+  const s = getSnippet(); if (!s) return;
+  s.title = document.getElementById('titleInput').value;
+  s.tag = document.getElementById('tagInput').value;
+  s.notes = document.getElementById('notesArea').value;
+  save(); render();
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function updateTabCounts() {
+  const s = getSnippet(); if (!s) return;
+  document.getElementById('scCount').textContent = (s.screenshots||[]).length;
+  document.getElementById('lnkCount').textContent = (s.links||[]).length;
+}
+
+// ── FORMAT ──
+function setFormat(fmt) {
+  const s = getSnippet(); if (!s) return;
+  s.format = fmt; save(); setFormatUI(fmt);
+}
+function setFormatUI(fmt) {
+  ['Raw','Bullet','Num'].forEach(f => {
+    const el = document.getElementById('fmt'+f);
+    if (el) el.classList.toggle('active', f.toLowerCase().replace('num','numbered') === fmt || (f==='Raw' && fmt==='raw') || (f==='Bullet' && fmt==='bullet') || (f==='Num' && fmt==='numbered'));
+  });
+}
+
+function getFormattedText() {
+  const s = getSnippet(); if (!s) return '';
+  const lines = s.notes.split('\n').filter(l => l.trim());
+  if (s.format === 'bullet') return lines.map(l => `• ${l.replace(/^[•\-\*]\s*/,'')}`).join('\n');
+  if (s.format === 'numbered') return lines.map((l,i) => `${i+1}. ${l.replace(/^\d+\.\s*/,'').replace(/^[•\-\*]\s*/,'')}`).join('\n');
+  return s.notes;
+}
+
+function copyToClipboard() {
+  const text = getFormattedText();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.innerHTML;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    showToast('Copied to clipboard!', 'success');
+  });
+}
+
+function updateCharCount() {
+  document.getElementById('charCount').textContent = (document.getElementById('notesArea').value||'').length + ' chars';
+}
+
+// ── QUICK REFINE ──
+async function quickRefine() {
+  switchTab('refine');
+  document.getElementById('aiInstruction').value = 'Fix grammar and spelling, improve clarity and make it professional';
+  await runAIRefine();
+}
+
+// Store refined texts by resultId so we never lose newlines via textContent
+const refinedStore = {};
+
+// Undo stack per snippet
+const undoStack = {};
+
+// ── AI REFINE ──
+async function runAIRefine() {
+  const s = getSnippet(); if (!s) return;
+  const instruction = document.getElementById('aiInstruction').value.trim();
+  if (!instruction) { showToast('Please enter an instruction', 'info'); return; }
+
+  // Read notes directly from textarea (live value, not stale s.notes)
+  const currentNotes = document.getElementById('notesArea').value.trim();
+  if (!currentNotes) { showToast('No notes to refine — add some content first', 'info'); return; }
+
+  const btn = document.getElementById('aiRunBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="ai-spinner"></span>`;
+
+  const results = document.getElementById('aiResults');
+  const loadCard = document.createElement('div');
+  loadCard.className = 'ai-result-card';
+  loadCard.innerHTML = `<div class="ai-result-body" style="color:var(--muted);font-style:italic">✦ Generating refined version...</div>`;
+  results.innerHTML = '';
+  results.appendChild(loadCard);
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1000,
+        system: "You are an expert IT technical writer helping write clear, professional ServiceNow ticket closing notes. Return ONLY the refined text with no preamble, no explanation, and no markdown backticks.",
+        messages: [{
+          role: "user",
+          content: `Instruction: ${instruction}\n\nOriginal notes:\n${currentNotes}`
+        }]
+      })
+    });
+    const data = await response.json();
+
+    // Surface real API errors (auth, rate limit, bad request, etc.)
+    if (!response.ok || data.error) {
+      const errMsg = data.error?.message || `API error ${response.status}: ${response.statusText}`;
+      throw new Error(errMsg);
+    }
+
+    const refined = data.content?.find(b => b.type === 'text')?.text?.trim() || '';
+
+    if (!refined) {
+      console.error('Unexpected API response:', JSON.stringify(data));
+      throw new Error('Unexpected API response — check browser console (F12) for details.');
+    }
+
+    const resultId = uid();
+    refinedStore[resultId] = refined; // store raw text with newlines preserved
+
+    const card = document.createElement('div');
+    card.className = 'ai-result-card';
+    card.innerHTML = `
+      <div class="ai-result-header">
+        <span class="ai-result-label">✦ Refined Version</span>
+        <div class="ai-result-actions">
+          <button class="ai-action-btn" onclick="copyRefined('${resultId}')">Copy</button>
+          <button class="ai-action-btn apply" onclick="applyRefined('${resultId}')">↩ Apply to Notes</button>
+        </div>
+      </div>
+      <div class="ai-result-body" id="result-${resultId}" style="white-space:pre-wrap">${esc(refined)}</div>`;
+    results.innerHTML = '';
+    results.appendChild(card);
+    showToast('Refined! Click "Apply to Notes" to use it.', 'ai');
+  } catch(e) {
+    loadCard.innerHTML = `<div class="ai-result-body" style="color:var(--red)">Error: ${e.message}</div>`;
+    showToast('Error: ' + e.message, 'info');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✦ Refine';
+  }
+}
+
+function applyPreset(preset) {
+  document.getElementById('aiInstruction').value = preset;
+  runAIRefine();
+}
+
+function copyRefined(id) {
+  const text = refinedStore[id] || document.getElementById('result-' + id)?.innerText || '';
+  navigator.clipboard.writeText(text).then(() => showToast('Copied refined text!', 'ai'));
+}
+
+function applyRefined(id) {
+  const text = refinedStore[id];
+  if (!text) { showToast('Could not find refined text', 'info'); return; }
+  const s = getSnippet(); if (!s) return;
+
+  // Save undo snapshot BEFORE applying
+  if (!undoStack[s.id]) undoStack[s.id] = [];
+  undoStack[s.id].push(s.notes);
+
+  s.notes = text;
+  document.getElementById('notesArea').value = text;
+  save(); updateCharCount(); render();
+  switchTab('notes');
+
+  // Show undo option in the notes bottom bar briefly
+  showUndoBanner();
+  showToast('Applied! Notes updated.', 'success');
+}
+
+function showUndoBanner() {
+  let banner = document.getElementById('undoBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'undoBanner';
+    banner.style.cssText = `
+      position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+      background:#1e2a38; border:1px solid rgba(0,229,255,0.3); border-radius:8px;
+      padding:9px 16px; display:flex; align-items:center; gap:12px; z-index:998;
+      font-size:12px; color:var(--muted); font-family:'DM Sans',sans-serif;
+      animation: fadeIn 0.2s ease;
+    `;
+    banner.innerHTML = `<span>Notes updated with AI version</span>
+      <button onclick="undoApply()" style="background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.3);border-radius:5px;padding:4px 10px;color:var(--accent);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">↩ Undo</button>
+      <button onclick="this.parentElement.remove()" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 4px;">✕</button>`;
+    document.body.appendChild(banner);
+  }
+  clearTimeout(banner._timeout);
+  banner._timeout = setTimeout(() => banner.remove(), 8000);
+}
+
+function undoApply() {
+  const s = getSnippet(); if (!s) return;
+  const stack = undoStack[s.id];
+  if (!stack || !stack.length) { showToast('Nothing to undo', 'info'); return; }
+  s.notes = stack.pop();
+  document.getElementById('notesArea').value = s.notes;
+  save(); updateCharCount(); render();
+  document.getElementById('undoBanner')?.remove();
+  showToast('Undone — original notes restored', 'success');
+}
+
+// ── SCREENSHOTS ──
+function handleScreenshotUpload(e) {
+  Array.from(e.target.files).forEach(readImageFile);
+  e.target.value = '';
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.add('drag-over');
+}
+function handleDragLeave(e) { document.getElementById('dropZone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag-over');
+  Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')).forEach(readImageFile);
+}
+
+function readImageFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const s = getSnippet(); if (!s) return;
+    s.screenshots.push({ id: uid(), data: ev.target.result, caption: '' });
+    save(); renderScreenshots(); updateTabCounts(); render();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderScreenshots() {
+  const s = getSnippet();
+  const grid = document.getElementById('screenshotsGrid');
+  if (!s || !s.screenshots.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = '';
+  s.screenshots.forEach((sc, i) => {
+    const item = document.createElement('div');
+    item.className = 'screenshot-item';
+    item.innerHTML = `
+      <img src="${sc.data}" alt="screenshot" onclick="openLightbox('${sc.data}')">
+      <button class="screenshot-del" onclick="deleteScreenshot('${sc.id}',event)">✕</button>
+      <input class="screenshot-caption-input" type="text" placeholder="Caption..." value="${esc(sc.caption||'')}" 
+        onchange="updateCaption('${sc.id}',this.value)" onclick="event.stopPropagation()">`;
+    grid.appendChild(item);
+  });
+}
+
+function deleteScreenshot(id, e) {
+  e.stopPropagation();
+  const s = getSnippet(); if (!s) return;
+  s.screenshots = s.screenshots.filter(x => x.id !== id);
+  save(); renderScreenshots(); updateTabCounts(); render();
+}
+
+function updateCaption(id, val) {
+  const s = getSnippet(); if (!s) return;
+  const sc = s.screenshots.find(x => x.id === id);
+  if (sc) { sc.caption = val; save(); }
+}
+
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// ── LINKS ──
+function addLink() {
+  const url = document.getElementById('linkUrl').value.trim();
+  const label = document.getElementById('linkLabel').value.trim();
+  if (!url) { showToast('Please enter a URL', 'info'); return; }
+  const s = getSnippet(); if (!s) return;
+  const fullUrl = url.startsWith('http') ? url : 'https://' + url;
+  s.links.push({ id: uid(), url: fullUrl, label: label || fullUrl });
+  save();
+  document.getElementById('linkUrl').value = '';
+  document.getElementById('linkLabel').value = '';
+  renderLinks(); updateTabCounts(); render();
+  showToast('Link added', 'success');
+}
+
+function renderLinks() {
+  const s = getSnippet();
+  const list = document.getElementById('linksList');
+  if (!s || !s.links.length) {
+    list.innerHTML = `<div class="links-empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>No links yet — add reference URLs above</span></div>`;
+    return;
+  }
+  list.innerHTML = '';
+  s.links.forEach(lnk => {
+    let faviconUrl = '';
+    try { faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(lnk.url).hostname}&sz=32`; } catch(e) {}
+    const item = document.createElement('div');
+    item.className = 'link-item';
+    item.innerHTML = `
+      ${faviconUrl ? `<img class="link-favicon" src="${faviconUrl}" onerror="this.style.display='none'">` : ''}
+      <div class="link-info">
+        <div class="link-label-text">${esc(lnk.label)}</div>
+        <div class="link-url-text">${esc(lnk.url)}</div>
+      </div>
+      <a class="link-open-btn" href="${lnk.url}" target="_blank" rel="noopener">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open
+      </a>
+      <button class="link-del-btn" onclick="deleteLink('${lnk.id}')">✕</button>`;
+    list.appendChild(item);
+  });
+}
+
+function deleteLink(id) {
+  const s = getSnippet(); if (!s) return;
+  s.links = s.links.filter(x => x.id !== id);
+  save(); renderLinks(); updateTabCounts(); render();
+}
+
+// ── DELETE ──
+function confirmDelete() { document.getElementById('deleteModal').classList.add('open'); }
+function closeModal() { document.getElementById('deleteModal').classList.remove('open'); }
+function deleteSnippet() {
+  snippets = snippets.filter(x => x.id !== currentId);
+  currentId = null; save(); closeModal();
+  document.getElementById('emptyState').style.display = 'flex';
+  document.getElementById('editorWrap').style.display = 'none';
+  render();
+}
+
+// ── IMPORT/EXPORT ──
+function exportAll() {
+  const blob = new Blob([JSON.stringify(snippets, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'techbrain-backup.json'; a.click();
+  showToast('Exported!', 'success');
+}
+function importAll(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (Array.isArray(data)) {
+        snippets = [...snippets, ...data]; save(); render();
+        showToast(`Imported ${data.length} snippets`, 'success');
+      }
+    } catch { showToast('Invalid file', 'info'); }
+  };
+  r.readAsText(file); e.target.value = '';
+}
+
+// ── TOAST ──
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast show ${type}`;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function filterSnippets(val) { searchTerm = val.toLowerCase(); render(); }
+
+// ── INIT ──
+load(); render();
+</script>
+</body>
+</html>
