@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tech Brain</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Reliable monospace stack - no external dependency */
+  @font-face {
+    font-family: 'Courier New', Courier, monospace;
+    src: local('Courier New'), local('Courier'), local('monospace');
+  }
+</style>
 <style>
 :root {
   --bg: #0a0e13;
@@ -67,7 +74,7 @@ header {
 }
 
 .brand-name {
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -214,7 +221,7 @@ header {
 }
 .sc-badge {
   font-size: 9px;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   padding: 1px 5px;
   border-radius: 3px;
   background: var(--surface3);
@@ -295,7 +302,7 @@ header {
   padding: 4px 8px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   outline: none;
   width: 110px;
   transition: all 0.15s;
@@ -347,7 +354,7 @@ header {
   background: var(--surface3);
   border-radius: 10px;
   padding: 1px 6px;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* ─── TAB PANELS ─── */
@@ -367,7 +374,7 @@ textarea.notes-area {
   background: transparent;
   border: none;
   padding: 16px 20px;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 12.5px;
   line-height: 1.9;
   color: var(--text);
@@ -462,7 +469,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
 .char-count {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* ─── AI REFINE PANEL ─── */
@@ -570,7 +577,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
   font-size: 11px;
   color: var(--purple);
   font-weight: 600;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -593,7 +600,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
 
 .ai-result-body {
   padding: 12px;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 12px;
   line-height: 1.8;
   color: var(--text);
@@ -793,7 +800,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 .link-open-btn {
   background: transparent;
@@ -929,7 +936,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
   padding: 9px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Space Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   outline: none;
   transition: border-color 0.15s;
   letter-spacing: 0.05em;
