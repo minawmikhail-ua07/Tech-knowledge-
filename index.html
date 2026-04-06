@@ -1284,10 +1284,9 @@ function setFormat(fmt) {
   s.format = fmt; save(); setFormatUI(fmt);
 }
 function setFormatUI(fmt) {
-  ['Raw','Bullet','Num'].forEach(f => {
-    const el = document.getElementById('fmt'+f);
-    if (el) el.classList.toggle('active', f.toLowerCase().replace('num','numbered') === fmt || (f==='Raw' && fmt==='raw') || (f==='Bullet' && fmt==='bullet') || (f==='Num' && fmt==='numbered'));
-  });
+  document.getElementById('fmtRaw').classList.toggle('active', fmt === 'raw');
+  document.getElementById('fmtBullet').classList.toggle('active', fmt === 'bullet');
+  document.getElementById('fmtNum').classList.toggle('active', fmt === 'numbered');
 }
 
 function getFormattedText() {
