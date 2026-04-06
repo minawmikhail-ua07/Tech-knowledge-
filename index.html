@@ -901,6 +901,47 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
 .toast.success { background: var(--green); color: #000; }
 .toast.info { background: var(--accent); color: #000; }
 .toast.ai { background: var(--purple); color: #000; }
+
+/* ─── API KEY ─── */
+.api-key-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(179,136,255,0.3);
+  background: rgba(179,136,255,0.08);
+  color: var(--purple);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.api-key-btn:hover { background: rgba(179,136,255,0.18); }
+.api-key-btn.key-set { border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.08); color: var(--green); }
+
+.api-key-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  transition: border-color 0.15s;
+  letter-spacing: 0.05em;
+}
+.api-key-input:focus { border-color: var(--purple); }
+.api-key-hint {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.api-key-hint a { color: var(--accent); text-decoration: none; }
+.api-key-hint a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -928,6 +969,7 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
   <div class="header-sep"></div>
   <span class="header-sub">ServiceNow Closing Notes</span>
   <div class="header-right">
+    <button class="api-key-btn" id="apiKeyBtn" onclick="openApiKeyModal()">⚙ API Key</button>
     <button class="hbtn" onclick="exportAll()">↑ Export</button>
     <label class="hbtn" style="cursor:pointer">↓ Import<input type="file" accept=".json" style="display:none" onchange="importAll(event)"></label>
   </div>
@@ -1069,6 +1111,32 @@ textarea.notes-area::-webkit-scrollbar-thumb { background: var(--border); }
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <img id="lightboxImg" src="" alt="">
+</div>
+
+
+<!-- API Key Modal -->
+<div class="modal-bg" id="apiKeyModal">
+  <div class="modal" style="width:440px;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      <h3 style="font-size:15px;font-weight:600;">Anthropic API Key</h3>
+    </div>
+    <p class="api-key-hint">
+      Your key is stored only in your browser (localStorage) and never sent anywhere except directly to Anthropic's API.<br><br>
+      Get your key at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a> → API Keys → Create Key.
+    </p>
+    <input class="api-key-input" id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." autocomplete="off" onkeydown="if(event.key==='Enter')saveApiKey()">
+    <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+      <button onclick="toggleApiKeyVisibility()" style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--muted);cursor:pointer;font-size:11px;font-family:'DM Sans',sans-serif;">Show/Hide</button>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button class="modal-cancel" onclick="closeApiKeyModal()">Cancel</button>
+        <button onclick="saveApiKey()" style="background:var(--purple);border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:600;color:#000;cursor:pointer;font-family:'DM Sans',sans-serif;">Save Key</button>
+      </div>
+    </div>
+    <div id="apiKeyClearRow" style="display:none;padding-top:4px;border-top:1px solid var(--border);">
+      <button onclick="clearApiKey()" style="background:transparent;border:none;color:var(--red);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;">✕ Remove saved key</button>
+    </div>
+  </div>
 </div>
 
 <!-- Delete Modal -->
@@ -1269,6 +1337,13 @@ async function runAIRefine() {
   const currentNotes = document.getElementById('notesArea').value.trim();
   if (!currentNotes) { showToast('No notes to refine — add some content first', 'info'); return; }
 
+  // Check API key first
+  if (!getApiKey()) {
+    openApiKeyModal();
+    showToast('Please add your Anthropic API key first', 'info');
+    return;
+  }
+
   const btn = document.getElementById('aiRunBtn');
   btn.disabled = true;
   btn.innerHTML = `<span class="ai-spinner"></span>`;
@@ -1285,6 +1360,8 @@ async function runAIRefine() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": getApiKey(),
+        "anthropic-version": "2023-06-01",
         "anthropic-dangerous-direct-browser-access": "true"
       },
       body: JSON.stringify({
@@ -1553,8 +1630,72 @@ function showToast(msg, type='info') {
 
 function filterSnippets(val) { searchTerm = val.toLowerCase(); render(); }
 
+
+// ── API KEY ──
+const API_KEY_STORAGE = 'techbrain_apikey';
+
+function getApiKey() {
+  return localStorage.getItem(API_KEY_STORAGE) || '';
+}
+
+function openApiKeyModal() {
+  const existing = getApiKey();
+  const input = document.getElementById('apiKeyInput');
+  input.value = existing ? '••••••••••••••••••••' : '';
+  input.dataset.hasExisting = existing ? 'true' : 'false';
+  document.getElementById('apiKeyClearRow').style.display = existing ? 'block' : 'none';
+  document.getElementById('apiKeyModal').classList.add('open');
+  if (!existing) setTimeout(() => input.focus(), 100);
+}
+
+function closeApiKeyModal() {
+  document.getElementById('apiKeyModal').classList.remove('open');
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('apiKeyInput');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function saveApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  const val = input.value.trim();
+  if (!val || val.startsWith('•')) {
+    closeApiKeyModal();
+    return;
+  }
+  if (!val.startsWith('sk-ant-')) {
+    showToast('Key should start with sk-ant-', 'info');
+    return;
+  }
+  localStorage.setItem(API_KEY_STORAGE, val);
+  updateApiKeyBtn();
+  closeApiKeyModal();
+  showToast('API key saved!', 'success');
+}
+
+function clearApiKey() {
+  localStorage.removeItem(API_KEY_STORAGE);
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiKeyClearRow').style.display = 'none';
+  updateApiKeyBtn();
+  closeApiKeyModal();
+  showToast('API key removed', 'info');
+}
+
+function updateApiKeyBtn() {
+  const btn = document.getElementById('apiKeyBtn');
+  if (getApiKey()) {
+    btn.textContent = '✓ API Key Set';
+    btn.classList.add('key-set');
+  } else {
+    btn.textContent = '⚙ API Key';
+    btn.classList.remove('key-set');
+  }
+}
+
 // ── INIT ──
-load(); render();
+load(); render(); updateApiKeyBtn();
 </script>
 </body>
 </html>
